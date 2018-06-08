@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#install all the packages necesary for cacti server
+yum -y install cacti mariadb-server php php-snmp php-process php-gd 
+
+#turn off SE linux
+setenforce 0           
+                                   
+#enable and start HTTP, SNMP and db services
+systemctl enable httpd snmpd mariadb
+systemctl start httpd snmpd mariadb
+                                   
+# Set your mysql/mariadb pasword.  here *** is your password
+mysqladmin -u root password cactipass                                              
+
+# grant the cacti user access to it
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root -pcactipass mysql    
+
+# Transfer your local timezone info to mysql
+echo "create database cacti;
+GRANT ALL ON cacti.* TO cacti@localhost IDENTIFIED BY 'cactipass'; 
+FLUSH privileges;
+
+GRANT SELECT ON mysql.time_zone_name TO cacti@localhost;           
+flush privileges;" > stuff.sql
+
+ # Run your sql script
+mysql -u root  -pcactipass < stuff.sql   
+
+# rpm -ql cacti|grep cacti.sql --Will list the location of the package cacti sql   
+# output is /usr/share/doc/cacti-1.0.4/cacti.sql, run that to populate your db
+mysql -u cacti -pcactipass cacti < /usr/share/doc/cacti-1.1.37/cacti.sql  
+
+# Set database username and password in $database_username = ''; and $database_password = '';  
+sed -i 's/username = '\''cactiuser'\''/username = '\''cacti'\''/g' /etc/cacti/db.php
+sed -i 's/password = '\''cactiuser'\''/password = '\''cactipass'\''/g' /etc/cacti/db.php
+
+#  the Cacti web interface is accessible only to localhost, allow other clients 
+sed -i 's/Require host localhost/Require all granted/g' /etc/httpd/conf.d/cacti.conf
+sed -i 's/Allow from localhost/Allow from all/g' /etc/httpd/conf.d/cacti.conf                              
+
+# bug fixes go fix php.ini and set date.timzone = America/regina in php
+sed -i 's`;date.timezone =`date.timezone = America/Regina`g' /etc/php.ini
+
+systemctl restart httpd
+sed -i 's/#//g' /etc/cron.d/cacti
+
+
+
+
+
+# web interface ipaddress/cacti
