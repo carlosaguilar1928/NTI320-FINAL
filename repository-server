@@ -1,0 +1,32 @@
+#!/bin/bash 
+
+#install the repo package and apache
+yum -y install createrepo httpd
+
+#turn off enforcement
+setenforce 0
+
+# create directories
+mdkir -p /repos/CentOS/7/Packages/
+
+# create repo in the directory
+createrepo /repos/CenOS/7/Packages
+
+# enable apache
+systemctl enable httpd
+systemctl start httpd
+
+# link html website to the created directories
+ln -s /var/www/html/centos /repos/CentOS
+
+sed -i 's/^/#/' /etc/httpd/conf.d/welcome.conf
+
+# configure apache lines 144, 145, 146 
+sed -i '144i     Options All' /etc/httpd/conf/httpd.conf
+sed -i '145i    # Disable directory index so that it will index our repos' /etc/httpd/conf/httpd.conf
+sed -i '146i     DirectoryIndex disabled' /etc/httpd/conf/httpd.conf
+
+systemctl restart httpd
+
+#remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
+#createrepo --update /repos/CentOS/7/Packages/
