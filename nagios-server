@@ -1,0 +1,26 @@
+#!/bin/bash
+
+yum install -y nagios
+systemctl enable nagios
+systemctl start nagios
+setenforce 0 
+yum install -y httpd
+systemctl enable httpd
+systemctl start httpd
+yum install -y nrpe
+systemctl enable nrpe
+systemctl start nrpe
+yum install nagios-plugins-all
+yum install nagios-plugins-nrpe
+htpasswd -c /etc/nagios/passwd nagiosadmin
+#history | cut -c 8-
+
+echo '########### NRPE CONFIG LINE #######################
+define command{
+command_name check_nrpe
+command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
+}' >> /etc/nagios/objects/commands.cfg
+
+
+
+#web interface ipaddress/nagios
