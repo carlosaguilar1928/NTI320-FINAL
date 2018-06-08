@@ -1,0 +1,73 @@
+#!/bin/bash
+
+gcloud init
+1
+intense-reason-191902
+
+#step 1. create firewall rules
+echo "firewall-rules... WOOHOO"
+gcloud compute firewall-rules create allow-http --description " allow http." \
+    --allow tcp:80
+gcloud compute firewall-rules create allow-https --description "Allow https." \
+    --allow tcp:443
+gcloud compute firewall-rules create allow-nrpe --description "Allow nrpe-server communication." \
+    --allow tcp:5666
+gcloud compute firewall-rules create allow-ldap --description "Allow ldap allowed." \
+    --allow tcp:636
+gcloud compute firewall-rules create allow-postgresql --description "Allow Postgresql." \
+    --allow tcp:5432
+gcloud compute firewall-rules create allow-django --description "Django test server connection allowed." \
+    --allow tcp:8000
+
+#step 2. install wget and download the scripts in raw format from github  
+echo "What you see is what you WGET"
+yum install wget -y     
+wget https://raw.githubusercontent.com/carlosaguilar1928/My-NTI-310/master/ldap-server-automation
+wget https://raw.githubusercontent.com/carlosaguilar1928/My-NTI-310/master/nfs-server-automation
+wget https://raw.githubusercontent.com/carlosaguilar1928/My-NTI-310/master/nfs-client-auto
+wget https://raw.githubusercontent.com/carlosaguilar1928/My-NTI-310/master/postgressql-server
+wget https://raw.githubusercontent.com/carlosaguilar1928/My-NTI-310/master/django-for-postgress
+ 
+ 
+#step 3. launching ldap and nfs servers   
+echo "LAUNCHING LDAP/NFS IN 3-2-1.. HEREE WEE GOOO" 
+gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/ldap-server-automation   
+gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/nfs-server-automation
+ 
+#step 4. resolving dependencies for ldap and nfs
+echo "Resolving Dependencies LDAP...AWESOMEEE" 
+    #ldapip=(gcloud compute instances list | grep ldapserver)
+    #echo $ldapid
+ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
+sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/nfs-client-auto
+nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
+sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/nfs-client-auto
+sleep 2
+
+# step 5. launching nfs and ldap client   
+echo "NFS AND LDAP CLIENTS ARE ALWAYS RIGHT...YAAAYY!!!"
+gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/nfs-client-auto 
+gcloud compute instances create client-02 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/nfs-client-auto 
+
+# step 6. launching postgres database 
+echo "launching postgres... FIRE IN THE HOLEEEE" 
+gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/postgressql-server
+
+# step 7. resolving dependencies for django
+echo "POSGRES HANDS UP, AND PUT YOUR IP WHERE I CAN SEE IT!!!"  
+postgresip=$(gcloud compute instances list | grep posgressql-db  | awk '{print $4}')
+sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/django-for-postgress
+sleep 2
+
+# step 8. launching django
+echo "D-J-A-N-G-O the D is silent!!!" 
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/django-for-postgress
+
+
+
+
+
+
+
+
+
