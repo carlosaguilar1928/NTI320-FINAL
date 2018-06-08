@@ -1,0 +1,106 @@
+#!/bin/bash
+yum -y install git
+git clone https://github.com/nic-instruction/hello-nti-310.git 
+
+yum -y install httpd
+yum -y install epel-release
+yum -y install phpldapadmin
+
+#installs ldap 
+yum install -y openldap-servers openldap-clients
+
+systemctl enable httpd
+systemctl start httpd
+
+# edit the apache settings file to allow ldap access thru the web gui
+sed -i 's,Require local,#Require local\n   Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf
+sed -i 's/Allow from 127.0.0.1/Allow from all/g' /etc/httpd/conf.d/phpldapadmin.conf
+cp hello-nti-310/config/config.php /etc/phpldapadmin.php
+chown ldap:apache /etc/phpldapadmin/config.php
+
+# turn off selinux since it messes with httpd
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config 
+setenforce 0
+systemctl restart httpd
+# turn off  Selinux and restart httpd, because Selinux actively blocks code to our php application. 
+#the above sed line is redundant with the setenforce 0 since they both do the same. But sed implementation is permanent. 
+
+echo "phpldapadmin is now up and running"
+echo "configuring ldap and ldapadmin"
+
+newsecret=$(slappasswd -g)
+newhash=$(slappasswd -s "$newsecret")
+echo -n "$newsecret" > /root/ldap_admin_pass
+chmod 0600 /root/ldap_admin_pass
+
+echo -e "dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcSuffix
+olcSuffix: dc=nti310,dc=local
+\n
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootDN
+olcRootDN: cn=ldapadm,dc=nti310,dc=local
+\n
+dn: olcDatabase={2}hdb,cn=config
+changetype: modify
+replace: olcRootPW
+olcRootPW: $newhash" > db.ldif
+#here we insert shema information into a file called db.ldif
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
+# here we modify the schema of the ldap by loading the db.ldif
+
+echo 'dn: olcDatabase={1}monitor,cn=config
+changetype: modify
+replace: olcAccess
+olcAccess: {0}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external, cn=auth" read by dn.base="cn=ldapadm,dc=nti310,dc=local" r
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f monitor.ldif
+
+open ssl req -new -x509 -nodes -out /etc/openldap/certs/nti310ldapcert.pem -keyout /etc/openldap/certs/nti310ldapkey.pem -days 365 -subj "/
+
+chown -R ldap. /etc/openldap/certs/nti*.pem
+
+echo -e "dn: cn=config
+changetype: modify
+replace: olcTLSCertificateFile
+olcTLSCertificateFile: /etc/openldap/certs/nti310ldapcert.pem
+\n
+dn: cn=config
+changetype: modify
+replace: olcTLSCertificateKeyFile
+olcTLSCertificateKeyFile: /etc/openldap/certs/nti310ldapkey.pem" > certs.ldif
+# vim to certs.ldif and enter spaces after each "dn" 
+
+ldapmodify -Y EXTERNAL -H ldapi:/// -f certs.ldif
+
+ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/shema/inetorgperson.ldif
+
+echo -e "dn: dc=nti310,dc=local
+dc: nti310
+objectClass: top
+objectClass: domain
+\n
+dn: cn=ldapadm ,dc=nti310,dc=local
+objectClass: organizationalRole
+cn: ldapadm
+description: LDAP Manager
+\n
+dn: ou=People,dc=nti310,dc=local
+objectClass: organizationalUnit
+ou: People
+\n
+dn: ou=Group,dc=nti310,dc=local
+objectClass: organizationalUnit
+ou: Group" > base.ldif
+# vim to this file and add spaces after each dn
+
+ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif -y /root/ldap_admin_pass
+
+
+# web interface ipaddress/phpldapadmin
+# password is stored in /root/ldap_admin_pass
