@@ -1,0 +1,43 @@
+#!/bin/bash
+
+yum install -y nfs-utils
+#installs nfs-utils for our server
+
+# create a directory structure called /nfsshare
+mkdir /var/nfsshare
+mkdir /var/nfsshare/devstuff
+mkdir /var/nfsshare/testing
+mkdir /var/nfsshare/home_dirs
+
+#change permissions to all open, for testing purposes
+chmod -R 777 /var/nfsshare/
+
+# enable a number of nfs services 
+systemctl enable rpcbind
+systemctl enable nfs-server
+systemctl enable nfs-lock
+systemctl enable nfs-idmap
+
+#start a number of nfs services
+systemctl start rpcbind
+systemctl start nfs-server
+systemctl start nfs-lock
+systemctl start nfs-idmap
+
+#rpcbind is not strictly necessary for nfs4 
+
+#change directory to our share directory
+cd /var/nfsshare
+
+# list the share we are going to export and put them into /etc/exports
+echo "/var/nfsshare/home_dirs *(rw.sync,no_all_squash)
+/var/nfsshare/devstuff *(rw.sync,no_all_squash)
+var/nfsshare/testing *(rw.sync,no_all_squash)" >> /etc/exports
+
+# after changing the configuration restart the nfs server
+systemctl restart nfs-server
+
+#install the net-tools so we can use ifconfig
+yum install -y net-tools
+
+# use the ifconfig to find your internal ip. you'll need it for the client install
