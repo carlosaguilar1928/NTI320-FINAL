@@ -28,8 +28,8 @@ git clone https://github.com/carlosaguilar1928/NTI320-FINAL
  
 echo "########Deployments#############" 
 
-gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/ldap-server-automation   
-gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/nfs-server-automation
+gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server-automation   
+gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server-automation
  
 
 echo "Resolving Dependencies LDAP" 
@@ -43,23 +43,49 @@ sleep 2
 
   
 echo "launching nfs and ldap client"
-gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/nfs-client-auto 
+gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-client-auto 
   
 echo "launching postgres" 
-gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/postgressql-server
+gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/postgressql-server
 
 
 echo "resolving dependencies for django"  
 postgresip=$(gcloud compute instances list | grep posgressql-db  | awk '{print $4}')
-sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/django-for-postgress
+sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
 sleep 2
 
 echo "launching django" 
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/django-for-postgress
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
+
+echo "launching repo server"
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
 
 
+echo "launching mail server" 
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
 
 
+echo "launching nagios" 
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
+
+
+echo "launching cacti"
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
+
+
+echo "launching rsyslog"
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
+
+
+echo "######### Building RPM###########"
+
+echo "########## Transfer RPM to REPO############"
+
+echo "##########Work with REPO Server##############" 
+
+echo "######### Install RPM in all clients ############" 
+
+echo "######### Point RPMs to monitoring Servers ###########" 
 
 
 
