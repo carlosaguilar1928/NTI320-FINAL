@@ -41,6 +41,8 @@ sed -i 's/Allow from 127.0.0.1/Allow from all/g' /etc/httpd/conf.d/phpPgAdmin.co
 sed -i 's/$conf\['\''extra_login_security'\''\] = true;/$conf\['\''extra_login_security'\''\] = false;/g' /etc/phpPgAdmin/config.inc.php
 
 # set permissions
+sed -i 's/local   all             all                                     peer/local   all             all                                     md5/g' /var/lib/pgsql/data/pg_hba.conf
+
 sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
 
 
