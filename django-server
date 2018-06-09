@@ -2,30 +2,23 @@
 
 yum install python-pip -y
 pip install virtualenv
-pip install --upgrade pip
-   
+pip install --upgrade pip   
+
+
 # setting up the django environment
 mkdir /opt/myproject
 cd /opt/myproject
 virtualenv myprojectenv
 source /opt/myproject/myprojectenv/bin/activate
-pip install django psycopg2
 django-admin.py startproject myproject .
-   
-# these commands are just for visual effect
-   # yum install tree -y
-   # tree myproject
-   
-cd ..
-#this finds this file and return the path to you.     ex. find / -name "settings.py" 
-#vim /opt/myproject/myproject/settings.py
+pip install django psycopg2
+
 
 sed -i '76,82 s/^/#/ ' /opt/myproject/myproject/settings.py
-# This line inserts a # in all line between 44 thru 66. 
-# No global (g)  required since this will be only done in these lines. 
+#No global (g)  required since this will be only done in these lines. 
+#this finds this file and return the path to you.     ex. find / -name "settings.py" 
 
-#this following line must be inserted into the settings.py file either manually or thru echo. 
-#enter this into the settings.py file and edit it
+
 echo "DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -36,9 +29,9 @@ echo "DATABASES = {
         'PORT': '5432',
     }
 }" >> /opt/myproject/myproject/settings.py
-
 #change the PORT, NAME, HOST, PASSWORD
 #PORT is 5432, HOST is the internal ip of your server 
+
 
 #migrate service into postgress via port 8000
 cd /opt/myproject
@@ -46,8 +39,11 @@ python manage.py makemigrations
 python manage.py migrate
 echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example', 'P@ssw0rd1')" | python manage.py shell
 
-#enter the password you created for the Postgress server. 
-
-sudo -u carlosaguilar1928 -E sh -c "source /opt/myproject/myprojectenv/bin/activate && /opt/myproject/manage.py runserver 0.0.0.0:8000&"
+ 
+source myprojectenv/bin/activate && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+#sudo -u carlosaguilar1928 -E sh -c "source /opt/myproject/myprojectenv/bin/activate && /opt/myproject/manage.py runserver 0.0.0.0:8000&"
 
 #http://server_domain_or_IP:8000 --> how to view if it worked
+# these commands are just for visual effect
+# yum install tree -y
+# tree myproject
