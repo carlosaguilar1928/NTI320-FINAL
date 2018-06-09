@@ -36,7 +36,7 @@ ALTER USER postgres WITH PASSWORD 'letmein';
 GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" > sqlfile.sql
 
 # this line changes user to "postgress"
-sudo -i -u postgres psql -U postgres -f /sqlfile.sql
+sudo -i -u postgres psql -U postgres -f /home/carlosaguilar1928/sqlfile.sql
 
 
 # create a sed line and verify it worked 
