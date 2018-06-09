@@ -34,16 +34,15 @@ echo "DATABASES = {
 
 
 #migrate service into postgress via port 8000
-cd /opt/myproject
-python manage.py makemigrations
-python manage.py migrate
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example', 'P@ssw0rd1')" | python manage.py shell
-
+#cd /opt/myproject
+#python manage.py makemigrations
+#python manage.py migrate
+#echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example', 'P@ssw0rd1')" | python manage.py shell
+#sudo -u carlosaguilar1928 -E sh -c "source /opt/myproject/myprojectenv/bin/activate && /opt/myproject/manage.py runserver 0.0.0.0:8000&"
  
 source myprojectenv/bin/activate && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000
-#sudo -u carlosaguilar1928 -E sh -c "source /opt/myproject/myprojectenv/bin/activate && /opt/myproject/manage.py runserver 0.0.0.0:8000&"
+
 
 #http://server_domain_or_IP:8000 --> how to view if it worked
-# these commands are just for visual effect
-# yum install tree -y
-# tree myproject
+# these commands are just for visual effect  (yum install tree -y)--> (tree myproject) 
+
