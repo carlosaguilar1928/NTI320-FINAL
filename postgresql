@@ -11,10 +11,6 @@ systemctl start postgresql
 systemctl enable httpd 
 systemctl start httpd
 
-# create a sed line and verify it worked 
-sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
-# vim /var/lib/pgsql/data/pg_hba.conf   
-systemctl restart postgresql
 
 # su - postgres
 # this will enter you into the postgres mode, we comment out the "su -postgress" command due to it being done automatically in the below echo statment
@@ -24,7 +20,7 @@ systemctl restart postgresql
 #create the settings via an echo line instead of manually
 echo -e "CREATE DATABASE myproject;
 \n
-CREATE USER myprojectuser WITH PASSWORD 'password';
+CREATE USER myprojectuser WITH PASSWORD 'Password';
 \n
 ALTER ROLE myprojectuser SET client_encoding TO 'utf8';
 \n
@@ -35,21 +31,17 @@ ALTER ROLE myprojectuser SET timezone TO 'UTC';
 ALTER USER postgres WITH PASSWORD 'letmein';
 GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" > sqlfile.sql
 
-# this line changes user to "postgress"
-sudo -i -u postgres psql -U postgres -f /home/carlosaguilar1928/sqlfile.sql
-
-
-# create a sed line and verify it worked 
-#sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
-# vim /var/lib/pgsql/data/pg_hba.conf   
-#systemctl restart postgresql
-
+# this line changes user to "Password"
+sudo -i -u postgres psql -U postgres -f /home/carlosaguilar1928/sqlfile.sql  
 
 # Now install a web-based GUI to view our database 
 yum install -y phpPgAdmin 
 sed -i 's/Require local/Require all granted/g' /etc/httpd/conf.d/phpPgAdmin.conf
 sed -i 's/Allow from 127.0.0.1/Allow from all/g' /etc/httpd/conf.d/phpPgAdmin.conf
 sed -i 's/$conf\['\''extra_login_security'\''\] = true;/$conf\['\''extra_login_security'\''\] = false;/g' /etc/phpPgAdmin/config.inc.php
+
+# set permissions
+sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
 
 setenforce 0
 systemctl restart postgresql
