@@ -29,10 +29,10 @@ ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
 ALTER ROLE myprojectuser SET timezone TO 'UTC';
 \n
 ALTER USER postgres WITH PASSWORD 'Password';
-GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" > sqlfile.sql
+GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" > /tmp/sqlfile.sql
 
 # this line changes user to "postgres"
-sudo -i -u postgres psql -U postgres -f /home/carlosaguilar1928/sqlfile.sql  
+sudo -i -u postgres psql -U postgres -f /tmp/sqlfile.sql  
 
 # Now install a web-based GUI to view our database 
 yum install -y phpPgAdmin 
@@ -42,6 +42,8 @@ sed -i 's/$conf\['\''extra_login_security'\''\] = true;/$conf\['\''extra_login_s
 
 # set permissions
 sed -i 's/ident/md5/g' /var/lib/pgsql/data/pg_hba.conf
+
+
 
 setenforce 0
 systemctl restart postgresql
