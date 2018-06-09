@@ -28,7 +28,7 @@ ALTER ROLE myprojectuser SET default_transaction_isolation TO 'read committed';
 \n
 ALTER ROLE myprojectuser SET timezone TO 'UTC';
 \n
-ALTER USER postgres WITH PASSWORD 'letmein';
+ALTER USER postgres WITH PASSWORD 'Password';
 GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" > sqlfile.sql
 
 # this line changes user to "Password"
@@ -50,4 +50,4 @@ systemctl restart httpd
 
 #test with (tail -F /var/log/messages | grep startup); (systemctl status postgresql)
 #login ipaddress/phpPgAdmin  
-#username:postgres  password:postgres
+#username:postgres  password:Password
