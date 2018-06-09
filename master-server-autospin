@@ -28,8 +28,8 @@ git clone https://github.com/carlosaguilar1928/NTI320-FINAL
  
 echo "########Deployments#############" 
 
-gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server-automation   
-gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server-automation
+gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server 
+gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
  
 
 echo "Resolving Dependencies LDAP" 
@@ -46,7 +46,7 @@ echo "launching nfs and ldap client"
 gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-client-auto 
   
 echo "launching postgres" 
-gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/postgressql-server
+gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/postgresql
 
 
 echo "resolving dependencies for django"  
@@ -55,27 +55,22 @@ sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/NTI320-FINAL/django-for
 sleep 2
 
 echo "launching django" 
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-server
 
 echo "launching repo server"
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
-
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/repository-server
 
 echo "launching mail server" 
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
-
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/mail-server
 
 echo "launching nagios" 
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
-
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nagios-server
 
 echo "launching cacti"
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
-
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/cacti-server
 
 echo "launching rsyslog"
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-for-postgress
-
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
 
 echo "######### Building RPM###########"
 
