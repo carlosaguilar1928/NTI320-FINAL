@@ -8,7 +8,7 @@ pip install --upgrade pip
 mkdir /opt/myproject
 cd /opt/myproject
 virtualenv myprojectenv
-source myprojectenv/bin/activate
+source /opt/myproject/myprojectenv/bin/activate
 pip install django psycopg2
 django-admin.py startproject myproject .
    
