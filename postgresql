@@ -31,7 +31,7 @@ ALTER ROLE myprojectuser SET timezone TO 'UTC';
 ALTER USER postgres WITH PASSWORD 'Password';
 GRANT ALL PRIVILEGES ON DATABASE myproject TO myprojectuser;" > sqlfile.sql
 
-# this line changes user to "Password"
+# this line changes user to "postgres"
 sudo -i -u postgres psql -U postgres -f /home/carlosaguilar1928/sqlfile.sql  
 
 # Now install a web-based GUI to view our database 
