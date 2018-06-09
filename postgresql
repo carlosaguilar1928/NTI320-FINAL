@@ -3,7 +3,7 @@
 yum install epel-release -y
 yum install python-pip python-devel gcc postgresql-server postgresql-devel postgresql-contrib -y
 postgresql-setup initdb
-yum install -y httpd
+#yum install -y httpd
 
 # enable and start postgressql and httpd
 systemctl enable postgresql
