@@ -75,24 +75,21 @@ gcloud compute instances create rsyslog-server --image-family centos-7 --image-p
 
 
 echo "######### Building RPM###########"
-
 gcloud compute scp startup.spec carlosaguilar1928@10.142.0.x:/rpmbuild/SPECS
 gcloud compute scp build.gz carlosaguilar1928@10.142.0.x:/rpmbuild/SOURCES
 gcloud compute ssh carlosaguilar1928@10.142.0.x --command "cd /rpmbuild"
 gcloud compute ssh carlosaguilar1928@10.142.0.x --command "rpmbuild -v -bb --clean SPECS/nagios.spec" 
 
 
-
-
 echo "########## Transfer RPM to REPO and work with repo############"
-gcloud compute scp rpmfile.rpm carlosaguilar1928@remoteserverip:/repos/CenOS/7/Packages
-#*** here this command is not doing it from the RPM server, is still working in the master server
-# I need to figure out how to remotely send a file from one remote server to another
+gcloud compute scp --recurse Build-server:/rpmbuild/RPMS/rpmfile.rpm /carlosaguilar1928
+gcloud compute scp /carlosaguilar1928/rpmfile.rpm carlosaguilar1928@repo-server:/repos/CenOS/7/Packages
+
 
 echo "######### Install RPM in all clients ############" 
 for servers in $(gcloud compute instances list | awk 'NR >= 2{ print$1 }');
 do 
-  gcloud compute ssh carlosaguilar1928@ipaddress --command "yum install -y rpm";  
+  gcloud compute ssh carlosaguilar1928@servername --command "yum install -y rpmfile.rpm";  
 done  
 
 echo "######### Generate Nagios check files ###########" 
