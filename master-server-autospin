@@ -57,7 +57,7 @@ gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image
   
 echo "launching postgres" 
 gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/postgresql
-sleep 30
+sleep 1m
 echo "resolving dependencies for django"  
 postgresip=$(gcloud compute instances list | grep posgressql-db  | awk '{print $4}')
 sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/NTI320-FINAL/django-server
