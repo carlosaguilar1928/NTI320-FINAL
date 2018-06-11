@@ -1,13 +1,14 @@
 #!/bin/bash 
 
 #install the repo package and apache
-yum -y install createrepo httpd
+yum -y install createrepo httpd nfs-client
 
 #turn off enforcement
 setenforce 0
 
 # create directories
 mdkir -p /repos/CentOS/7/Packages/
+mkdir /mnt/nfs
 
 # create repo in the directory
 createrepo /repos/CenOS/7/Packages
@@ -25,6 +26,10 @@ sed -i 's/^/#/' /etc/httpd/conf.d/welcome.conf
 sed -i '144i     Options All' /etc/httpd/conf/httpd.conf
 sed -i '145i    # Disable directory index so that it will index our repos' /etc/httpd/conf/httpd.conf
 sed -i '146i     DirectoryIndex disabled' /etc/httpd/conf/httpd.conf
+
+#mount NFS directory
+echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
+mount -a
 
 systemctl restart httpd
 
