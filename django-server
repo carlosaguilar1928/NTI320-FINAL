@@ -41,14 +41,14 @@ echo "from django.contrib.auth.models import User; User.objects.create_superuser
 
 sudo -u carlosaguilar1928 -E sh -c "source /opt/myproject/myprojectenv/bin/activate && /opt/myproject/manage.py runserver 0.0.0.0:8000&"
  
-
 echo "[nti-320]
 name=Extra Packages for Centos from NTI-320 7 - $basearch
-# this is the repo echo statement for all the clients 
-baseurl=http://$ip/CentOS/7/Packages/
+#this will create a .repo file inside this server that will point to the repository server.
+baseurl=http://5.6.7.8/CentOS/7/Packages/
 enabled=1
 gpgcheck=0
 " >> /etc/yum.repos.d/NTI-320.repo
+
 
 
 #http://server_domain_or_IP:8000 --> how to view if it worked
