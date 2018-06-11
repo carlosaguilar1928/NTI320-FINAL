@@ -51,7 +51,7 @@ ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
 sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
 sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
-sleep 10
+sleep 1m
 
 echo "launching nfs and ldap client"
 gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client 
