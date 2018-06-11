@@ -1,0 +1,8 @@
+#!/bin/bash
+
+#install the rpm packages
+sudo yum -y install rpm-build
+
+#create an envioronement for the RPM creation
+mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+
