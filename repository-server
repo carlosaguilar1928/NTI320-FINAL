@@ -8,7 +8,7 @@ setenforce 0
 
 # create directories
 mdkir -p /repos/CentOS/7/Packages/
-mkdir /mnt/nfs
+
 
 # create repo in the directory
 createrepo /repos/CenOS/7/Packages
@@ -27,10 +27,6 @@ sed -i '144i     Options All' /etc/httpd/conf/httpd.conf
 sed -i '145i    # Disable directory index so that it will index our repos' /etc/httpd/conf/httpd.conf
 sed -i '146i     DirectoryIndex disabled' /etc/httpd/conf/httpd.conf
 
-#mount NFS directory with NFS server IP using sed
-echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
-mount -a
-
 #this is the repository server client file with REPO server IP
 echo "[nti-320]
 name=Extra Packages for Centos from NTI-320 7 - $basearch
@@ -42,7 +38,10 @@ gpgcheck=0
 
 systemctl restart httpd
 
-
+# create and mount NFS directory with NFS server IP using sed
+# mkdir /mnt/nfs
+# echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
+# mount -a
 
 #remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
 #createrepo --update /repos/CentOS/7/Packages/
