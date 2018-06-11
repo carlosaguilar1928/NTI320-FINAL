@@ -27,14 +27,14 @@ gcloud compute instances create repo-server --image-family centos-7 --image-proj
 sleep 5
 
 repoip=$(gcloud compute instances list | grep repo-server  | awk '{print $4}')
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/ldap-server
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/nfs-server
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/postgresql
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/nagios-server
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/cacti-server
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/rsyslog-server
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/ldap-nfs-client
-#sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/mail or load balancer !!!!!!!!!!!!!!! OOJJJOOOOOOO
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-server
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/nfs-server
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/postgresql
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/django-server
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/nagios-server
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/cacti-server
+sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
 
 echo "########Deployments#############" 
 
