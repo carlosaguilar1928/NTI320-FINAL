@@ -25,7 +25,7 @@ echo "DATABASES = {
         'NAME': 'myproject',
         'USER': 'myprojectuser',
         'PASSWORD': 'password',
-        'HOST': '10.142.0.2',
+        'HOST': 'a.b.c.d',
         'PORT': '5432',
     }
 }" >> /opt/myproject/myproject/settings.py
