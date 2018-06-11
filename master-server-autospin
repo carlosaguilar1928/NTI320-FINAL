@@ -24,7 +24,7 @@ echo "#######Installing git###########"
 yum install git -y    
 git clone https://github.com/carlosaguilar1928/NTI320-FINAL
 gcloud compute instances create repo-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/repository-server 
-sleep 5
+sleep 1.5m
 
 #this puts the repo server ip into the echo statements for the client setup file
 repoip=$(gcloud compute instances list | grep repo-server  | awk '{print $4}')
@@ -37,11 +37,12 @@ sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/nagios-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/cacti-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
 
+
 echo "########Deployments#############" 
 
 gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server 
 gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
-sleep 5
+sleep 1m
 
 echo "Resolving Dependencies LDAP" 
     #ldapip=(gcloud compute instances list | grep ldapserver)
@@ -50,7 +51,7 @@ ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
 sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
 sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
-sleep 3
+sleep 10
 
 echo "launching nfs and ldap client"
 gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client 
@@ -60,7 +61,7 @@ gcloud compute instances create postgresql-db --image-family centos-7 --image-pr
 echo "resolving dependencies for django"  
 postgresip=$(gcloud compute instances list | grep posgressql-db  | awk '{print $4}')
 sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/NTI320-FINAL/django-server
-sleep 3
+sleep 1m
 
 echo "launching django" 
 gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-server
@@ -68,8 +69,8 @@ gcloud compute instances create django-server --image-family centos-7 --image-pr
 echo "launching mail server" 
 gcloud compute instances create mail-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/mail-server
 
-
 Echo "launching monitoring servers!!!!"
+
 echo "launching nagios" 
 gcloud compute instances create nagios-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nagios-server
 
@@ -83,15 +84,17 @@ gcloud compute instances create rsyslog-server --image-family centos-7 --image-p
 
 echo "######### Building RPM###########"
 gcloud compute scp nti-320.spec carlosaguilar1928@10.142.0.x:/rpmbuild/SPECS
+sleep 20
 gcloud compute scp sample.gz carlosaguilar1928@10.142.0.x:/rpmbuild/SOURCES
-sleep 3
+sleep 20
 gcloud compute ssh carlosaguilar1928@10.142.0.x --command "cd /rpmbuild && rpmbuild -v -bb --clean SPECS/nti-320"
+sleep 20
 gcloud compute ssh carlosaguilar1928@10.142.0.x --command "cp .rpm /mnt/nfs"
-
+sleep 20
 
 
 echo "########## Transfer RPM to REPO Server ############"
-gcloud compute ssh carlosaguilar1928@$repoip --command "cp /mtn/nfs/.rpm /repos/CentOS/7/Packages/
+gcloud compute ssh carlosaguilar1928@$repoip --command "cp /mtn/nfs/.rpm /repos/CentOS/7/Packages/"
 
 
 
