@@ -28,7 +28,7 @@ sed -i '145i    # Disable directory index so that it will index our repos' /etc/
 sed -i '146i     DirectoryIndex disabled' /etc/httpd/conf/httpd.conf
 
 #mount NFS directory
-echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
+echo "5.6.7.8:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
 mount -a
 
 systemctl restart httpd
