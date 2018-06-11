@@ -102,5 +102,14 @@ ou: Group" > base.ldif
 ldapadd -x -W -D "cn=ldapadm,dc=nti310,dc=local" -f base.ldif -y /root/ldap_admin_pass
 
 
+
+echo "[nti-320]
+name=Extra Packages for Centos from NTI-320 7 - $basearch
+# this is creating a .Repo file inside this server, it will point to the REPO server via its ip 
+baseurl=http://$ip/CentOS/7/Packages/
+enabled=1
+gpgcheck=0
+" >> /etc/yum.repos.d/NTI-320.repo
+
 # web interface ipaddress/phpldapadmin
 # password is stored in /root/ldap_admin_pass
