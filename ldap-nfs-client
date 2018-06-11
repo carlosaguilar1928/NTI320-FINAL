@@ -9,8 +9,10 @@ wget https://raw.githubusercontent.com/carlosaguilar1928/Monitoring-/master/ldap
 while read line; do echo "$line" | debconf-set-selections; done < ldap_debconf
 sed -i 's/compat/compat ldap/g' /etc/nsswitch.conf 
 /etc/init.d/nscd restart
-sed -i 's,uri ldapi:///,uri ldap://a.b.c.d,g' /etc/ldap.conf
-sed -i 's/base dc=example,dc=net/base dc=nti310,dc=local/g' /etc/ldap.conf
+#!!!!!!!!!!!!!! lookout here!!!!!!!!!!!!!!!
+# these two sed lines might cause issues since they are not exact. troubleshoot further
+sed -i 's,uri ldap:///,uri ldap://a.b.c.d,g' /etc/ldap/ldap.conf
+sed -i 's/BASE dc=example,dc=com/BASE dc=nti310,dc=local/g' /etc/ldap/ldap.conf
 export DEBIAN_FRONTEND=interactive
 # this variable turns on/off the "ncurses" GUI from debconf
 
