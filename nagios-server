@@ -21,6 +21,12 @@ command_name check_nrpe
 command_line $USER1$/check_nrpe -H $HOSTADDRESS$ -c $ARG1$
 }' >> /etc/nagios/objects/commands.cfg
 
-
+echo "[nti-320]
+name=Extra Packages for Centos from NTI-320 7 - $basearch
+#this will create a .repo file inside this server that will point to the repository server.
+baseurl=http://$ip/CentOS/7/Packages/
+enabled=1
+gpgcheck=0
+" >> /etc/yum.repos.d/NTI-320.repo
 
 #web interface ipaddress/nagios
