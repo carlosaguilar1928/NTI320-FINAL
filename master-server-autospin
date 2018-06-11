@@ -46,9 +46,9 @@ echo "Resolving Dependencies LDAP"
     #ldapip=(gcloud compute instances list | grep ldapserver)
     #echo $ldapid
 ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
-sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/ldap-nfs-client
+sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
-sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/ldap-nfs-client
+sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 sleep 3
 
 echo "launching nfs and ldap client"
