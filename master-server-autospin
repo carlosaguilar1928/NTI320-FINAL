@@ -37,6 +37,11 @@ sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/nagios-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/cacti-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
 
+echo "launching Buildserver"
+gcloud compute instances create repo-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server 
+buildip=$(gcloud compute instances list | grep rpmbuild-server  | awk '{print $4}')
+
+sleep 1m
 
 echo "########Deployments#############" 
 
