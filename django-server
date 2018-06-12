@@ -2,16 +2,15 @@
 
 yum install python-pip -y
 pip install virtualenv
-pip install --upgrade pip   
+pip install --upgrade pip
+pip install django psycopg2 
 
 
 # setting up the django environment
 mkdir /opt/myproject
-cd /opt/myproject
-virtualenv myprojectenv
+virtualenv /opt/myproject/myprojectenv
 source /opt/myproject/myprojectenv/bin/activate
-django-admin.py startproject myproject .
-pip install django psycopg2
+django-admin.py startproject myproject /opt/myproject
 
 
 sed -i '76,82 s/^/#/ ' /opt/myproject/myproject/settings.py
@@ -34,12 +33,8 @@ echo "DATABASES = {
 
 
 #migrate service into postgress via port 8000
-cd /opt/myproject
-python manage.py makemigrations
 python manage.py migrate
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example', 'P@ssw0rd1')" | python manage.py shell
-
-sudo -u carlosaguilar1928 -E sh -c "source /opt/myproject/myprojectenv/bin/activate && /opt/myproject/manage.py runserver 0.0.0.0:8000&"
+echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | /opt/myproject/myproject/manage.py shell
  
 echo "[nti-320]
 name=Extra Packages for Centos from NTI-320 7 - $basearch
