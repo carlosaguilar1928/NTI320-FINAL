@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #install the rpm packages
-sudo yum -y install rpm-build
+sudo yum -y install rpm-build 
 
 #create an envioronement for the RPM creation
 mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
@@ -11,12 +11,13 @@ yum install -y wget
 wget https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/sample.spec 
 cp /home/carlosaguilar1928/sample.spec /root/rpmbuild/SPECS
 
-#wget 
-#cp 
+wget https://github.com/nic-instruction/hello-nti-320/blob/master/startup-0.1.tar.gz?raw=true
+mv startup-0.1.tar.gz\?raw\=true startup-0.1.tar.gz
+cp /home/carlosaguilar1928/startup-0.1.tar.gz /root/rpmbuild/SOURCES
 
 #change directory and run the rpmcommand
-cd /rpmbuild
-rpmbuild -v -bb --clean SPECS/nti-320"
+cd /root/rpmbuild
+rpmbuild -v -bb --clean SPECS/sample.spec
 
 # create and mount NFS directory with NFS server IP using sed
 mkdir /mnt/nfs
