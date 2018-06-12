@@ -27,4 +27,4 @@ mount -a
 sleep 20
 
 # change file to your network mount to be view via the network
-cp /root/rpmbuild/RPMS/x86_64/file.rpm /mnt/nfs
+cp /root/rpmbuild/RPMS/x86_64/*.rpm /mnt/nfs
