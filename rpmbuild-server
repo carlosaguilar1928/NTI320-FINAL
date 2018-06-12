@@ -6,3 +6,17 @@ sudo yum -y install rpm-build
 #create an envioronement for the RPM creation
 mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
+yum install -y wget 
+
+wget https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/sample.spec 
+cp /home/carlosaguilar1928/sample.spec /root/rpmbuild/SPECS
+
+#wget 
+#cp 
+cd /rpmbuild 
+rpmbuild -v -bb --clean SPECS/nti-320"
+
+# create and mount NFS directory with NFS server IP using sed
+mkdir /mnt/nfs
+echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
+mount -a
