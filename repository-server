@@ -7,11 +7,11 @@ yum -y install createrepo httpd nfs-client
 setenforce 0
 
 # create directories
-mdkir -p /repos/CentOS/7/Packages/
+mkdir -p /repos/CentOS/7/Packages/
 
 
 # create repo in the directory
-createrepo /repos/CenOS/7/Packages
+createrepo /repos/CentOS/7/Packages
 
 # enable apache
 systemctl enable httpd
