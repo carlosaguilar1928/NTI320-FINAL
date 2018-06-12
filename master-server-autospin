@@ -24,7 +24,7 @@ yum install git -y
 git clone https://github.com/carlosaguilar1928/NTI320-FINAL
 
 echo " creating Repo Server"
-gcloud compute instances create repo-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/repository-server 
+gcloud compute instances create repo-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/repository-server 
 repoip=$(gcloud compute instances list | grep repository-server | awk '{print $4}')
 sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/cacti-server
 sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/django-server
@@ -40,8 +40,8 @@ sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-clien
 
 echo "######## NTI-310 Deployments#############" 
 
-gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server 
-gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
+gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro --tags http-server  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server 
+gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
 sleep 1m
 
 echo "Resolving Dependencies LDAP" 
@@ -52,10 +52,10 @@ sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 sleep 1m
 
 echo "launching nfs and ldap client"
-gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client 
+gcloud compute instances create client-01 --image-family ubuntu-1604-lts --image-project ubuntu-os-cloud --machine-type f1-micro --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client 
   
 echo "launching postgres" 
-gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/postgresql
+gcloud compute instances create postgresql-db --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/postgresql
 sleep 1m
 
 echo "resolving dependencies for django"  
@@ -64,23 +64,23 @@ sed -i "s/a.b.c.d/$postgresip/g" /home/carlosaguilar1928/NTI320-FINAL/django-ser
 sleep 1m
 
 echo "launching django" 
-gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-server
+gcloud compute instances create django-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/django-server
 
 echo "launching load-balancer" 
-gcloud compute instances create mail-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/load-balancer
+gcloud compute instances create mail-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/load-balancer
 
 
 
 Echo "#######launching monitoring servers#############"
 
 echo "launching nagios" 
-gcloud compute instances create nagios-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nagios-server
+gcloud compute instances create nagios-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nagios-server
 
 echo "launching cacti"
-gcloud compute instances create cacti-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/cacti-server
+gcloud compute instances create cacti-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/cacti-server
 
 echo "launching rsyslog"
-gcloud compute instances create rsyslog-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
+gcloud compute instances create rsyslog-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
 
 
 
@@ -88,7 +88,7 @@ echo "#########Create RPM###########"
 sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server
 
 echo "Launching Buildserver"
-gcloud compute instances create build-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server 
+gcloud compute instances create build-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server 
 # rpm is built inside the build server automatically
 # the rpm will be passed to the Repo server via an nfs_mount
 # the nfs mount will copy the rpm via a wait command using sleep. 
