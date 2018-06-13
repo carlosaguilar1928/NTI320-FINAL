@@ -10,8 +10,8 @@ virtualenv /opt/django/djangoenv
 source /opt/django/djangoenv/bin/activate
 
 pip install django psycopg2
-django-admin startproject project1
-#django-admin.py startproject project1 /opt/django
+django-admin startproject project1 /opt/django
+
 
 sed -i '76,82 s/^/#/ ' /opt/django/project1/settings.py
 #No global (g)  required since this will be only done in these lines. 
