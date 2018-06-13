@@ -93,9 +93,7 @@ gcloud compute instances create build-server --image-family centos-7 --image-pro
 # the rpm will be passed to the Repo server via an nfs_mount
 # the nfs mount will copy the rpm via a wait command using sleep. 
 
-gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo echo $nfsip:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab"
-
-
+gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo echo $nfsip:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0 | sudo tee -a /etc/fstab"
 gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo mount -a" 
 
 echo "######### Install RPM in all clients ############" 
