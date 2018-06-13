@@ -34,7 +34,7 @@ echo "DATABASES = {
 # migrate before creating a superuser
 python /opt/django/manage.py migrate
 # deletes and creates the superuser
-echo "from django.contrib.auth.models import User; User.objects.filter(email='root@example.com').delete(); User.objects.create_superuser('root', 'root@example.com', 'password123')" | python /opt/django/manage.py shell
+echo "from django.contrib.auth.models import User; User.objects.filter(email='root@example.com').delete(); User.objects.create_superuser('root', 'root@example.com', 'password123')" | python /opt/myproject/manage.py shell
  
 # run the following as 'root'
 sudo -u root -E sh -c "\\
