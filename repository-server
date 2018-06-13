@@ -42,9 +42,11 @@ systemctl restart httpd
 mkdir /mnt/nfs
 echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
 mount -a
+createrepo --update /repos/CentOS/7/Packages/
+
 
 sleep 10m
 cp /mnt/nfs/*.rpm /repos/CentOS/7/Packages/
-createrepo --update /repos/CentOS/7/Packages/
+
 #remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
 
