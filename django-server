@@ -3,20 +3,19 @@
 yum install python-pip -y
 pip install virtualenv
 pip install --upgrade pip
-pip install Django 
-pip install psycopg2 
-
-# setting up the django environment
+ 
+#setting up the django environment
 mkdir /opt/django
 virtualenv /opt/django/djangoenv
 source /opt/django/djangoenv/bin/activate
-django-admin.py startproject project1 /opt/django     
+django-admin.py startproject project1 /opt/django
 chown -R carlosaguilar1928 /opt/django/
+pip install Django
+pip install psycopg2
 
 sed -i '76,82 s/^/#/ ' /opt/django/project1/settings.py
 #No global (g)  required since this will be only done in these lines. 
 #this finds this file and return the path to you.     ex. find / -name "settings.py" 
-
 
 echo "DATABASES = {
     'default': {
