@@ -38,7 +38,7 @@ echo "from django.contrib.auth.models import User; User.objects.filter(email='ro
  
 # run the following as 'root'
 sudo -u root -E sh -c "\\
-source /opt/myproject/project1env/bin/activate && \\
+source /opt/myproject/projectenv/bin/activate && \\
 /opt/myproject/manage.py runserver 0.0.0.0:8000 &"
 
 
