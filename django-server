@@ -12,13 +12,13 @@ source /opt/django/djangoenv/bin/activate
 chown -R carlosaguilar1928 /opt/django
 pip install django psycopg2
 
-django-admin.py startproject project1 /opt/django
+sudo -u carlosaguilar1928 django-admin.py startproject project1 /opt/django
 
 sed -i '76,82 s/^/#/ ' /opt/django/project1/settings.py
 #No global (g)  required since this will be only done in these lines. 
 #this finds this file and return the path to you.     ex. find / -name "settings.py" 
 
-echo "DATABASES = {
+sudo -u carlosaguilar1928 echo "DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'myproject',
@@ -32,9 +32,9 @@ echo "DATABASES = {
 #PORT is 5432, HOST is the internal ip of your server 
 
 # migrate before creating a superuser
-python /opt/django/manage.py migrate
+sudo -u carlosaguilar1928 python /opt/django/manage.py migrate
 # deletes and creates the superuser
-echo "from django.contrib.auth.models import User; User.objects.filter(email='root@example.com').delete(); User.objects.create_superuser('root', 'root@example.com', 'password123')" | python /opt/django/manage.py shell
+sudo -u carlosaguilar1928 echo "from django.contrib.auth.models import User; User.objects.filter(email='root@example.com').delete(); User.objects.create_superuser('root', 'root@example.com', 'password123')" | python /opt/django/manage.py shell
  
 # run the following as 'root'
 sudo -u carlosaguilar1928 -E sh -c "\\
