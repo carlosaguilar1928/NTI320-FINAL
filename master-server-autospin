@@ -79,7 +79,15 @@ gcloud compute instances create rsyslog-server --image-family centos-7 --image-p
 
 
 echo "######### Generate Nagios check files ###########" 
-gcloud compute scp nagios_config/*.cfg carlosaguilar@nagios-server:/home/carlosaguilar1928/
+
+for machine in (); do 
+./config_generate ip machine
+done
+
+
+
+
+gcloud compute scp nagios_config/*.cfg carlosaguilar@nagios-server:/etc/nagios/conf.d
 
 
 
