@@ -1,8 +1,8 @@
 #!/bin/bash
 
 #install the rpm packages
-sudo yum -y install rpm-build make gcc git 
-sudo yum install nfs-utils -y
+yum -y install rpm-build make gcc git 
+yum install nfs-utils -y
 #create an envioronement for the RPM creation
 mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
@@ -18,13 +18,11 @@ cp /home/carlosaguilar1928/startup-0.1.tar.gz /root/rpmbuild/SOURCES
 #change directory and run the rpmcommand
 cd /root/rpmbuild
 rpmbuild -v -bb --clean SPECS/sample.spec
-sleep 20
 
 # create and mount NFS directory with NFS server IP using sed
 mkdir /mnt/nfs
 echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
 mount -a
-sleep 20
 
 # change file to your network mount to be view via the network
 cp /root/rpmbuild/RPMS/x86_64/*.rpm /mnt/nfs
