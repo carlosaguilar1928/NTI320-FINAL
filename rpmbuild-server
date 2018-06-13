@@ -18,6 +18,7 @@ mv startup-0.1.tar.gz\?raw\=true startup-0.1.tar.gz
 cp /home/carlosaguilar1928/startup-0.1.tar.gz /root/rpmbuild/SOURCES
 
 #change directory and run the rpmcommand
+sleep 20
 cd /root/rpmbuild
 rpmbuild -v -bb --clean SPECS/sample.spec
 
