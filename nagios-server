@@ -14,6 +14,7 @@ yum install nagios-plugins-all
 yum install nagios-plugins-nrpe
 htpasswd -c /etc/nagios/passwd nagiosadmin
 #history | cut -c 8-
+chmod 777 /etc/nagios/conf.d
 
 echo '########### NRPE CONFIG LINE #######################
 define command{
