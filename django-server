@@ -13,20 +13,23 @@ pip install django psycopg2
 django-admin startproject myproject /opt/django
 
 
-sed -i '76,82 s/^/#/ ' /opt/django/myproject/settings.py
+#sed -i '76,82 s/^/#/ ' /opt/django/myproject/settings.py
 #No global (g)  required since this will be only done in these lines. 
 #this finds this file and return the path to you.     ex. find / -name "settings.py" 
 
-echo "DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'myproject',
-        'USER': 'myprojectuser',
-        'PASSWORD': 'Password',
-        'HOST': '10.142.0.2',
-        'PORT': '5432',
-    }
-}" >> /opt/django/myproject/settings.py
+yum -y install wget
+wget https://github.com/carlosaguilar1928/NTI320-FINAL/blob/master/settings.py
+mv settings.py to /opt/django/myproject/settings.py
+#echo "DATABASES = {
+#    'default': {
+ #       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+  #      'NAME': 'myproject',
+   #     'USER': 'myprojectuser',
+    #    'PASSWORD': 'Password',
+     #   'HOST': '10.142.0.2',
+      #  'PORT': '5432',
+#    }
+#}" >> /opt/django/myproject/settings.py
 #change the PORT, NAME, HOST, PASSWORD
 #PORT is 5432, HOST is the internal ip of your server 
 
