@@ -3,13 +3,13 @@
 yum install python-pip -y
 pip install virtualenv
 pip install --upgrade pip
-pip install django psycopg2 
-
+ 
 
 # setting up the django environment
 mkdir /opt/myproject
 virtualenv /opt/myproject/myprojectenv
 source /opt/myproject/myprojectenv/bin/activate
+pip install django psycopg2 
 django-admin.py startproject myproject /opt/myproject
 
 
@@ -56,4 +56,9 @@ gpgcheck=0
 
 #http://server_domain_or_IP:8000 --> how to view if it worked
 # these commands are just for visual effect  (yum install tree -y)--> (tree myproject) 
+#1.	Simple install virtual environment and python version
+#2.	use virtualenv env to create virtualenvironment.
+#3.	activate your virtualenv. using . /env_name/bin/activate
+#4.	use pip install django==1.70 (specify version to install django)
+#5.	pip list to list all installed packages
 
