@@ -31,11 +31,16 @@ echo "DATABASES = {
 #change the PORT, NAME, HOST, PASSWORD
 #PORT is 5432, HOST is the internal ip of your server 
 
-
-#migrate service into postgress via port 8000
-python manage.py migrate
-echo "from django.contrib.auth.models import User; User.objects.create_superuser('admin', 'admin@example.com', 'pass')" | /opt/myproject/myproject/manage.py shell
+# migrate before creating a superuser
+python /opt/django/manage.py migrate
+# deletes and creates the superuser
+echo "from django.contrib.auth.models import User; User.objects.filter(email='root@example.com').delete(); User.objects.create_superuser('root', 'root@example.com', 'password123')" | python /opt/django/manage.py shell
  
+
+
+
+
+
 echo "[nti-320]
 name=Extra Packages for Centos from NTI-320 7 - $basearch
 #this will create a .repo file inside this server that will point to the repository server.
