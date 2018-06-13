@@ -2,7 +2,7 @@
 
 #install the repo package and apache
 yum -y install createrepo httpd 
-sudo yum install nfs-utils -y
+yum install nfs-utils -y
 #turn off enforcement
 setenforce 0
 
