@@ -40,12 +40,5 @@ systemctl restart nfs-server
 #install the net-tools so we can use ifconfig
 yum install -y net-tools
 
-echo "[nti-320]
-name=Extra Packages for Centos from NTI-320 7 - $basearch
-#this will create a .repo file inside this server that will point to the repository server.
-baseurl=http://5.6.7.8/CentOS/7/Packages/
-enabled=1
-gpgcheck=0
-" >> /etc/yum.repos.d/NTI-320.repo
 
 # $ip needs to be replaced with the actual number and the name and location neet to match
