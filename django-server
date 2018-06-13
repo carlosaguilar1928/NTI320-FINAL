@@ -3,18 +3,17 @@
 yum install python-pip -y
 pip install virtualenv
 pip install --upgrade pip
- 
+pip install Django 
+pip install psycopg2 
 
 # setting up the django environment
 mkdir /opt/django
 virtualenv /opt/django/djangoenv
 source /opt/django/djangoenv/bin/activate
-pip install Django 
-pip install psycopg2 
-django-admin.py startproject project1       #enter path here ???????
+django-admin.py startproject project1 /opt/django     
 chown -R carlosaguilar1928 /opt/django/
 
-sed -i '76,82 s/^/#/ ' /opt/myproject/project1/settings.py
+sed -i '76,82 s/^/#/ ' /opt/django/project1/settings.py
 #No global (g)  required since this will be only done in these lines. 
 #this finds this file and return the path to you.     ex. find / -name "settings.py" 
 
@@ -28,7 +27,7 @@ echo "DATABASES = {
         'HOST': 'a.b.c.d',
         'PORT': '5432',
     }
-}" >> /opt/myproject/project1/settings.py
+}" >> /opt/django/project1/settings.py
 #change the PORT, NAME, HOST, PASSWORD
 #PORT is 5432, HOST is the internal ip of your server 
 
@@ -44,7 +43,7 @@ source /opt/django/djangoenv/bin/activate && \\
 
 
 
-
+# this is the echo for the REPO server RPM 
 echo "[nti-320]
 name=Extra Packages for Centos from NTI-320 7 - $basearch
 #this will create a .repo file inside this server that will point to the repository server.
@@ -52,8 +51,6 @@ baseurl=http://5.6.7.8/CentOS/7/Packages/
 enabled=1
 gpgcheck=0
 " >> /etc/yum.repos.d/NTI-320.repo
-
-
 
 #http://server_domain_or_IP:8000 --> how to view if it worked
 # these commands are just for visual effect  (yum install tree -y)--> (tree myproject) 
