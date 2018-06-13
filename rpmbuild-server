@@ -19,8 +19,8 @@ cp /home/carlosaguilar1928/startup-0.1.tar.gz /root/rpmbuild/SOURCES
 
 #change directory and run the rpmcommand
 sleep 20
-cd /root/rpmbuild
-rpmbuild -v -bb --clean SPECS/sample.spec
+sudo cd /root/rpmbuild
+sudo rpmbuild -v -bb --clean SPECS/sample.spec
 
 # create and mount NFS directory with NFS server IP using sed
 mkdir /mnt/nfs
