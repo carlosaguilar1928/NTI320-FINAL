@@ -81,7 +81,7 @@ gcloud compute instances create build-server --image-family centos-7 --image-pro
 gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo echo $nfsip:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0 | sudo tee -a /etc/fstab"
 gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo mount -a" 
 
-
+sleep 10m
 
 echo "######### Install RPM in all clients ############" 
 for servers in $(gcloud compute instances list | awk 'NR >= 2{ print$1 }');
