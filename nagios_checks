@@ -49,4 +49,4 @@ define service{
         service_description             memory
         check_command                   check_nrpe!check_mem
 }
-">> /etc/nagios/conf.d/"$host".cfg
+">> nagios_config/
