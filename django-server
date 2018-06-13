@@ -36,7 +36,7 @@ python /opt/django/manage.py migrate
 # deletes and creates the superuser
 echo "from django.contrib.auth.models import User; User.objects.filter(email='root@example.com').delete(); User.objects.create_superuser('root', 'root@example.com', 'password123')" | python /opt/django/manage.py shell
  
-# run the following as 'codes'
+# run the following as 'root'
 sudo -u root -E sh -c "\\
 source /opt/django/bin/activate && \\
 /opt/django/manage.py runserver 0:8000 &"
