@@ -9,7 +9,16 @@ echo "#######Installing Installing Git-Build-Repo ###########"
 yum install git -y    
 git clone https://github.com/carlosaguilar1928/NTI320-FINAL
 
-echo " creating Repo Server"
+
+echo "creating NFS dependencies for BUILD and REPO"
+gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
+sleep 20
+nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
+sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/repository-server
+sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server
+sleep 20
+
+echo " creating REPO Server"
 gcloud compute instances create repo-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/repository-server 
 repoip=$(gcloud compute instances list | grep repository-server | awk '{print $4}')
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/cacti-server
@@ -18,21 +27,20 @@ sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/rsyslog-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/postgresql
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/django-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-server
-sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/nfs-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/load-balancer
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
+# nfs and build server are not included here since is already running
+
 
 
 echo "######## NTI-310 Deployments#############" 
 
 gcloud compute instances create ldap-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro --tags http-server  --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/ldap-server 
-gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
 sleep 20
 
 echo "Resolving Dependencies LDAP" 
 ldapip=$(gcloud compute instances list | grep ldap-server  | awk '{print $4}')
 sed -i "s/a.b.c.d/$ldapip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
-nfsip=$(gcloud compute instances list | grep nfs-server  | awk '{print $4}')
 sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 sleep 20
 
@@ -56,7 +64,7 @@ gcloud compute instances create loadbalancer-server --image-family centos-7 --im
 
 
 
-Echo "#######launching monitoring servers#############"
+echo "#######launching monitoring servers#############"
 
 echo "launching nagios" 
 gcloud compute instances create nagios-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nagios-server
@@ -70,8 +78,6 @@ gcloud compute instances create rsyslog-server --image-family centos-7 --image-p
 
 
 echo "#########Create RPM###########"
-sed -i "s/1.2.3.4/$nfsip/g" /home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server
-
 echo "Launching Buildserver"
 gcloud compute instances create build-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server 
 # rpm is built inside the build server automatically
