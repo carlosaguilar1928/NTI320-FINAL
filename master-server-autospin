@@ -4,20 +4,6 @@ gcloud init
 1
 intense-reason-191902
 
-echo "#######creating firewall rules########"
-gcloud compute firewall-rules create allow-http --description " allow http." \
-    --allow tcp:80
-gcloud compute firewall-rules create allow-https --description "Allow https." \
-    --allow tcp:443
-gcloud compute firewall-rules create allow-nrpe --description "Allow nrpe-server communication." \
-    --allow tcp:5666
-gcloud compute firewall-rules create allow-ldap --description "Allow ldap allowed." \
-    --allow tcp:636
-gcloud compute firewall-rules create allow-postgresql --description "Allow Postgresql." \
-    --allow tcp:5432
-gcloud compute firewall-rules create allow-django --description "Django test server connection allowed." \
-    --allow tcp:8000
-    
 
 echo "#######Installing Installing Git-Build-Repo ###########"
 yum install git -y    
