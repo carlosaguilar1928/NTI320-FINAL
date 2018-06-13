@@ -21,13 +21,13 @@ yum -y install wget
 wget https://github.com/carlosaguilar1928/NTI320-FINAL/blob/master/settings.py
 mv settings.py to /opt/django/myproject/settings.py
 #echo "DATABASES = {
-#    'default': {
- #       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-  #      'NAME': 'myproject',
-   #     'USER': 'myprojectuser',
-    #    'PASSWORD': 'Password',
-     #   'HOST': '10.142.0.2',
-      #  'PORT': '5432',
+#     'default': {
+#      'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#      'NAME': 'myproject',
+#      'USER': 'myprojectuser',
+#      'PASSWORD': 'Password',
+#       'HOST': '10.142.0.2',
+#       'PORT': '5432',
 #    }
 #}" >> /opt/django/myproject/settings.py
 #change the PORT, NAME, HOST, PASSWORD
