@@ -22,7 +22,7 @@ echo "DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'myproject',
         'USER': 'myprojectuser',
-        'PASSWORD': 'password',
+        'PASSWORD': 'Password',
         'HOST': '10.142.0.2',
         'PORT': '5432',
     }
