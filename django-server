@@ -3,13 +3,12 @@
 yum install python-pip -y
 pip install virtualenv
 pip install --upgrade pip
- 
+pip install Django psycopg2
+
 #setting up the django environment
 mkdir /opt/django
 virtualenv /opt/django/djangoenv
 source /opt/django/djangoenv/bin/activate
-cd /opt/django
-pip install Django psycopg2
 django-admin.py startproject project1 /opt/django
 
 chown -R carlosaguilar1928 /opt/django
