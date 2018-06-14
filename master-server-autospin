@@ -105,7 +105,7 @@ sleep 10m
 echo "######### Install RPM in all clients ############" 
 for servers in $(gcloud compute instances list | awk 'NR >= 2{ print$1 }');
 do 
-  gcloud compute ssh carlosaguilar1928@$servers --command "sudo yum install -y rpmfile.rpm";  
+  gcloud compute ssh carlosaguilar1928@$servers --command "sudo yum install -y rpmfile";  
 done  
 
 
