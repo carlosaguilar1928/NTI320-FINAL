@@ -12,8 +12,8 @@ sed -i 's/PasswordAuthentication no/PasswordAuthentication Yes/g' /etc/ssh/sshd_
 
 /etc/init.d/nscd restart
 
-sed -i 's,uri ldapi:///,uri ldap://LDAPIP,g' /etc/ldap.conf
-sed -i 's,uri ldapi:///,uri ldap://LDAPIP,g' /etc/ldap.conf
+sed -i 's,uri ldapi:///,uri ldap://a.b.c.d,g' /etc/ldap.conf
+sed -i 's,uri ldapi:///,uri ldap://a.b.c.d,g' /etc/ldap.conf
 #sed -i 's,uri ldap:///,uri ldap://a.b.c.d,g' /etc/ldap/ldap.conf
 #sed -i 's/BASE dc=example,dc=com/BASE dc=nti310,dc=local/g' /etc/ldap/ldap.conf
 
