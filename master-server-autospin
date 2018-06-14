@@ -81,8 +81,8 @@ instances=
 echo "######### Generate Nagios check files ###########" 
 
 for ipaddress in $( gcloud compute instances list  | awk '{print $4}' | grep -v PREEMPTIBLE ); do
-machine=$( gcloud compute instances list | grep $ipaddress | awk '{print $1}' | grep -v NAME )
-./config_generate machine ipaddress
+   machine=$( gcloud compute instances list | grep $ipaddress | awk '{print $1}' | grep -v NAME )
+   ./config_generate $machine $ipaddress
 done
 
 
