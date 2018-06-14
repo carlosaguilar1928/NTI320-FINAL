@@ -10,6 +10,8 @@ yum install git -y
 git clone https://github.com/carlosaguilar1928/NTI320-FINAL
 
 
+
+echo "#########Create RPM###########"
 echo "creating NFS dependencies for BUILD and REPO"
 gcloud compute instances create nfs-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/nfs-server
 sleep 20
@@ -30,6 +32,13 @@ sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-server
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/load-balancer
 sed -i "s/5.6.7.8/$repoip/g" /home/carlosaguilar1928/NTI320-FINAL/ldap-nfs-client
 # nfs and build server are not included here since is already running
+
+echo "Launching Buildserver"
+gcloud compute instances create build-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server 
+
+#another way of install the mount into the nfs server 
+#gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo echo $nfsip:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0 | sudo tee -a /etc/fstab"
+#gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo mount -a" 
 
 
 
@@ -84,29 +93,18 @@ for ipaddress in $( gcloud compute instances list  | awk '{print $4}' | grep -v 
    ./config_generate $machine $ipaddress
 done
 
-
-
 gcloud compute scp nagios_config/*.cfg carlosaguilar@nagios-server:/etc/nagios/conf.d
 
 
 
-echo "#########Create RPM###########"
-echo "Launching Buildserver"
-gcloud compute instances create build-server --image-family centos-7 --image-project centos-cloud --machine-type f1-micro  --tags http-server --metadata-from-file startup-script=/home/carlosaguilar1928/NTI320-FINAL/rpmbuild-server 
-# rpm is built inside the build server automatically
-# the rpm will be passed to the Repo server via an nfs_mount
-# the nfs mount will copy the rpm via a wait command using sleep. 
-#gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo echo $nfsip:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0 | sudo tee -a /etc/fstab"
-#gcloud compute ssh carlosaguilar1928@nfs-server --command "sudo mount -a" 
 
-sleep 10m
 
 echo "######### Install RPM in all clients ############" 
-for servers in $(gcloud compute instances list | awk 'NR >= 2{ print$1 }');
-do 
-  gcloud compute ssh carlosaguilar1928@$servers --command "sudo yum install -y rpmfile";  
-done  
-
+#for servers in $(gcloud compute instances list | awk 'NR >= 2{ print$1 }');
+#do 
+#  gcloud compute ssh carlosaguilar1928@$servers --command "sudo yum install -y rpmfile";  
+#done  
+# --> run these commands at the end from the gcloud  
 
 
 
