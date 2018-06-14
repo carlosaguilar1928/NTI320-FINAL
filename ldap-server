@@ -80,9 +80,9 @@ olcTLSCertificateKeyFile: /etc/openldap/certs/nti310ldapkey.pem" > certs.ldif
 
 ldapmodify -Y EXTERNAL -H ldapi:/// -f certs.ldif
 
-ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
-ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
-ldap -Y EXTERNAL -H ldapi:/// -f /etc/openldap/shema/inetorgperson.ldif
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/cosine.ldif
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/schema/nis.ldif
+ldapadd -Y EXTERNAL -H ldapi:/// -f /etc/openldap/shema/inetorgperson.ldif
 
 echo -e "dn: dc=nti310,dc=local
 dc: nti310
