@@ -16,8 +16,7 @@ systemctl start httpd
 sed -i 's,Require local,#Require local\n   Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf
 
 echo "install the php.config file here" 
-cp /home/carlosaguilar1928/NTI320-FINAL/config.php /etc/phpldapadmin/
-
+#cp /home/carlosaguilar1928/NTI320-FINAL/config.php /etc/phpldapadmin/
 sed -i 's/Allow from 127.0.0.1/Allow from all/g' /etc/httpd/conf.d/phpldapadmin.conf
 cp hello-nti-310/config/config.php /etc/phpldapadmin.php
 chown ldap:apache /etc/phpldapadmin/config.php
