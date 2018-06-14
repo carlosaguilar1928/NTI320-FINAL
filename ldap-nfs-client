@@ -1,21 +1,27 @@
 #!/bin/bash
 
-#first of all install the ldap client on the nfsclient machine
-export DEBIAN_FRONTEND=noninteractive
-apt-get install -y libpam-ldap nscd 
-# install the debconf-utils GUI 
-wget https://raw.githubusercontent.com/carlosaguilar1928/Monitoring-/master/ldap_debconf
-# wget the raw ldap_debconf configuration files that were extrapolated from the manual configuration
-while read line; do echo "$line" | debconf-set-selections; done < ldap_debconf
-sed -i 's/compat/compat ldap/g' /etc/nsswitch.conf 
-/etc/init.d/nscd restart
-#!!!!!!!!!!!!!! lookout here!!!!!!!!!!!!!!!
-# these two sed lines might cause issues since they are not exact. troubleshoot further
-sed -i 's,uri ldap:///,uri ldap://a.b.c.d,g' /etc/ldap/ldap.conf
-sed -i 's/BASE dc=example,dc=com/BASE dc=nti310,dc=local/g' /etc/ldap/ldap.conf
-export DEBIAN_FRONTEND=interactive
-# this variable turns on/off the "ncurses" GUI from debconf
+echo "####### Installing Ldap Client ##########" 
+export DEBIAN_FRONTEND=noninteractive  # install the debconf-utils GUI
 
+apt-get install -y libpam-ldap nscd 
+wget https://raw.githubusercontent.com/carlosaguilar1928/Monitoring-/master/ldap_debconf   #extrapolated file 
+while read line; do echo "$line" | debconf-set-selections; done < ldap_debconf
+
+sed -i 's/compat/compat ldap/g' /etc/nsswitch.conf 
+sed -i 's/PasswordAuthentication no/PasswordAuthentication Yes/g' /etc/ssh/sshd_confi
+
+/etc/init.d/nscd restart
+
+sed -i 's,uri ldapi:///,uri ldap://LDAPIP,g' /etc/ldap.conf
+sed -i 's,uri ldapi:///,uri ldap://LDAPIP,g' /etc/ldap.conf
+#sed -i 's,uri ldap:///,uri ldap://a.b.c.d,g' /etc/ldap/ldap.conf
+#sed -i 's/BASE dc=example,dc=com/BASE dc=nti310,dc=local/g' /etc/ldap/ldap.conf
+
+export DEBIAN_FRONTEND=interactive  # this variable turns on/off the "ncurses" GUI from debconf
+
+
+
+echo "##### Installing NFS Client######" 
 apt-get install -y nfs-client
 # install the nfs client in our machine
 
@@ -24,22 +30,19 @@ showmount -e $1.2.3.4
 #after the $ sign, insert the internal ip of our nfs server 
 
 mkdir /mnt/test
-#make a mount point for the 'test' nfs share
+echo "1.2.3.4:/var/nfsshare/testing	 /mnt/test 	nfs	 defaults 0 0" >> /etc/fstab
+mount -a
 
-echo "1.2.3.4:/var/nfsshare/testing	/mnt/test	nfs	defaults 0 0" >> /etc/fstab
+
+#make a mount point for the 'test' nfs share
 # when you are done , echo your mount/share configuration into the fstab file
 # this will mount the share on reboot; you should use your nfs server ip address not 1.2.3.4
-
-mount -a
 #execute this command to mount all the shares in your fstab file
-
-
 #test by changing direcotory into the /mnt/test directory and su'ing one of your ldap users
 # after su'ing the user perform and ls and notice that the user is the owner of the file
 # also the ldap group you added that user to, should be the owner of the group
-cd /mnt/test 
-su bob
-ls -l 
+
+
 
 echo "[nti-320]
 name=Extra Packages for Centos from NTI-320 7 - $basearch
