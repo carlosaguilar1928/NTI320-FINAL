@@ -15,9 +15,9 @@ systemctl enable httpd
 systemctl start httpd
 
 echo "installing the php config file here" 
-yum install git
-git clone https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/config.php
-cp /home/carlosaguilar1928/NTI320-FINAL/config.php /etc/phpldapadmin/
+yum install wget -y
+wget https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/config.php
+cp /home/carlosaguilar1928/config.php /etc/phpldapadmin/
 # allow ldap access thru the web gui
 sed -i 's/Allow from 127.0.0.1/Allow from all/g' /etc/httpd/conf.d/phpldapadmin.conf
 sed -i 's,Require local,#Require local\n   Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf 
@@ -55,6 +55,7 @@ olcRootPW: $newhash" > db.ldif
 # modify schema of ldap in db.ldif
 ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
 
+# install ssl certificate
 echo "dn: olcDatabase={1}monitor,cn=config
 changetype: modify
 replace: olcAccess
