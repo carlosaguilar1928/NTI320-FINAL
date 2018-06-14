@@ -13,7 +13,6 @@ wget https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/sam
 wget https://github.com/nic-instruction/hello-nti-320/blob/master/startup-0.1.tar.gz?raw=true
 cp /home/carlosaguilar1928/sample.spec /root/rpmbuild/SPECS
 
-wget https://github.com/nic-instruction/hello-nti-320/blob/master/startup-0.1.tar.gz?raw=true
 mv startup-0.1.tar.gz\?raw\=true startup-0.1.tar.gz
 cp /home/carlosaguilar1928/startup-0.1.tar.gz /root/rpmbuild/SOURCES
 
