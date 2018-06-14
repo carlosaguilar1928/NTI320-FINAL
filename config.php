@@ -484,3 +484,6 @@ $servers->setValue('server','custom_attrs',array('nsRoleDN','nsRole','nsAccountL
 $servers->setValue('server','force_may',array('uidNumber','gidNumber','sambaSID'));
 */
 ?>
+
+
+# pipe this into cp /config.php /etc/phpldapamin/config.php
