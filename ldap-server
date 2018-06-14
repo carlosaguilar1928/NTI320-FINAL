@@ -1,41 +1,42 @@
 #!/bin/bash
-yum -y install git
-git clone https://github.com/nic-instruction/hello-nti-310.git 
 
+
+echo "#########installing apache, phpldapadmin, openldap######" 
 yum -y install httpd
 yum -y install epel-release
 yum -y install phpldapadmin
+yum install -y openldap-servers openldap-clients        #installs ldap 
 
-#installs ldap 
-yum install -y openldap-servers openldap-clients
+#turn off selinux becasue it messes with apache
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config 
 
+#enable and restart apache
 systemctl enable httpd
 systemctl start httpd
 
-# edit the apache settings file to allow ldap access thru the web gui
-sed -i 's,Require local,#Require local\n   Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf
-
-echo "install the php.config file here" 
-#cp /home/carlosaguilar1928/NTI320-FINAL/config.php /etc/phpldapadmin/
+echo "installing the php config file here" 
+yum install git
+git clone https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/config.php
+cp /home/carlosaguilar1928/NTI320-FINAL/config.php /etc/phpldapadmin/
+# allow ldap access thru the web gui
 sed -i 's/Allow from 127.0.0.1/Allow from all/g' /etc/httpd/conf.d/phpldapadmin.conf
-cp hello-nti-310/config/config.php /etc/phpldapadmin.php
+sed -i 's,Require local,#Require local\n   Require all granted,g' /etc/httpd/conf.d/phpldapadmin.conf 
+
+# change ownership of the config php file
 chown ldap:apache /etc/phpldapadmin/config.php
-
-# turn off selinux since it messes with httpd
-sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config 
-setenforce 0
 systemctl restart httpd
-# turn off  Selinux and restart httpd, because Selinux actively blocks code to our php application. 
-#the above sed line is redundant with the setenforce 0 since they both do the same. But sed implementation is permanent. 
 
-echo "phpldapadmin is now up and running"
-echo "configuring ldap and ldapadmin"
 
+
+echo "#######configuring ldap and ldapadmin########"
+
+# mess with password credentials for your ldap server 
 newsecret=$(slappasswd -g)
 newhash=$(slappasswd -s "$newsecret")
 echo -n "$newsecret" > /root/ldap_admin_pass
 chmod 0600 /root/ldap_admin_pass
 
+# insert schema information into ldif file
 echo -e "dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 replace: olcSuffix
@@ -50,10 +51,9 @@ dn: olcDatabase={2}hdb,cn=config
 changetype: modify
 replace: olcRootPW
 olcRootPW: $newhash" > db.ldif
-#here we insert shema information into a file called db.ldif
 
+# modify schema of ldap in db.ldif
 ldapmodify -Y EXTERNAL -H ldapi:/// -f db.ldif
-# here we modify the schema of the ldap by loading the db.ldif
 
 echo "dn: olcDatabase={1}monitor,cn=config
 changetype: modify
