@@ -93,7 +93,7 @@ for ipaddress in $( gcloud compute instances list  | awk '{print $4}' | grep -v 
    ./config_generate $machine $ipaddress
 done
 
-gcloud compute scp nagios_config/*.cfg carlosaguilar@nagios-server:/etc/nagios/conf.d
+gcloud compute scp nagios_config/*.cfg carlosaguilar1928@nagios-server:/etc/nagios/conf.d
 
 
 
@@ -107,7 +107,10 @@ echo "######### Install RPM in all clients ############"
 # --> run these commands at the end from the gcloud  
 
 
-
+for ipaddress in $( gcloud compute instances list  | awk '{print $4}' | grep -v PREEMPTIBLE ); do
+   machine=$( gcloud compute instances list | grep $ipaddress | awk '{print $1}' | grep -v NAME )
+   bash ./config_generate $machine $ipaddress
+done
 
 
 
