@@ -118,6 +118,6 @@ enabled=1
 gpgcheck=0
 " >> /etc/yum.repos.d/NTI-320.repo
 
-
+setenforce 0
 # web interface ipaddress/phpldapadmin
 # password is stored in /root/ldap_admin_pass
