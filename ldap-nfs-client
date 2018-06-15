@@ -1,5 +1,7 @@
 #!/bin/bash
 
+apt-get update 
+
 echo "####### Installing Ldap Client ##########" 
 export DEBIAN_FRONTEND=noninteractive  # install the debconf-utils GUI
 
