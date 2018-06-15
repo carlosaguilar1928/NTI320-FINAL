@@ -7,6 +7,9 @@ yum -y install epel-release
 yum -y install phpldapadmin
 yum install -y openldap-servers openldap-clients        #installs ldap 
 
+systemctl enable slapd
+systemctl start slapd
+
 #turn off selinux becasue it messes with apache
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config 
 
