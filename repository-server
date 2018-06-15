@@ -7,17 +7,17 @@ yum install nfs-utils -y
 setenforce 0
 
 # create directories
-mkdir -p /repos/CentOS/7/Packages/
+mkdir -p /repos/centos/7/extras/x86_64/Packages/ 
 
 
-# create repo in the directory
-createrepo /repos/CentOS/7/Packages
+# create repo in the directory, path is not negotiable I made a mistake here
+createrepo /repos/centos/7/extras/x86_64/Packages/ 
 
 # enable apache
 systemctl enable httpd
 systemctl start httpd
 
-# link html website to the created directories
+# link html website to the created directories, must point to your local path first
 ln -s /repos/CentOS /var/www/html/centos
 
 sed -i 's/^/#/' /etc/httpd/conf.d/welcome.conf
@@ -42,7 +42,7 @@ systemctl restart httpd
 mkdir /mnt/nfs
 echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
 mount -a
-createrepo --update /repos/CentOS/7/Packages/
+createrepo --update /repos/centos/7/extras/x86_64/Packages/ 
 
 
 #sleep 10m
