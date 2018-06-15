@@ -9,17 +9,19 @@ mkdir -p /root/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 #get files and copy them to appropiate location 
 yum install -y wget 
 cd /home/carlosaguilar1928
-wget https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/sample.spec 
-wget https://github.com/nic-instruction/hello-nti-320/blob/master/startup-0.1.tar.gz?raw=true
-cp /home/carlosaguilar1928/sample.spec /root/rpmbuild/SPECS
+wget https://github.com/nic-instruction/NTI-320/blob/master/Final/nti-320-plugins-0.1.tar.gz?raw=true
+wget https://raw.githubusercontent.com/nic-instruction/NTI-320/master/Final/nti-320-plugins.spec
+#wget https://raw.githubusercontent.com/carlosaguilar1928/NTI320-FINAL/master/sample.spec 
+#wget https://github.com/nic-instruction/hello-nti-320/blob/master/startup-0.1.tar.gz?raw=true
+cp /home/carlosaguilar1928/nti-320-plugins.spec /root/rpmbuild/SPECS
 
-mv startup-0.1.tar.gz\?raw\=true startup-0.1.tar.gz
-cp /home/carlosaguilar1928/startup-0.1.tar.gz /root/rpmbuild/SOURCES
+mv nti-320-plugins-0.1.tar.gz?raw=true nti-320-plugins-0.1.tar.gz
+cp /home/carlosaguilar1928/nti-320-plugins-0.1.tar.gz /root/rpmbuild/SOURCES
 
 #change directory and run the rpmcommand
 sleep 20
 sudo cd /root/rpmbuild
-sudo rpmbuild -v -bb --clean SPECS/sample.spec
+sudo rpmbuild -v -bb --clean SPECS/nti-320-plugins.spec
 
 # create and mount NFS directory with NFS server IP using sed
 mkdir /mnt/nfs
