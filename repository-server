@@ -45,8 +45,8 @@ mount -a
 createrepo --update /repos/CentOS/7/Packages/
 
 
-sleep 10m
-cp /mnt/nfs/*.rpm /repos/CentOS/7/Packages/
+#sleep 10m
+#cp /mnt/nfs/*.rpm /repos/CentOS/7/Packages/
 
 #remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
 
