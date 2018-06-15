@@ -49,4 +49,4 @@ createrepo --update /repos/CentOS/7/Packages/
 #cp /mnt/nfs/*.rpm /repos/CentOS/7/Packages/
 
 #remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
-
+# the web interface is the ip address of the server 
