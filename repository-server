@@ -42,11 +42,12 @@ systemctl restart httpd
 mkdir /mnt/nfs
 echo "1.2.3.4:/var/nfsshare/home_dirs  /mnt/nfs  nfs     defaults 0 0" >> /etc/fstab
 mount -a
+#sleep 10m
+#cp /mnt/nfs/*.rpm /repos/centos/7/extras/x86_64/Packages/ 
+# the above line will copy the .rpm file from the nfs share folder to the destination repository folder
+
+# everytime that you copy an .rpm file to the server destination folder you must apply the following command
 createrepo --update /repos/centos/7/extras/x86_64/Packages/ 
 
 
-#sleep 10m
-#cp /mnt/nfs/*.rpm /repos/CentOS/7/Packages/
-
-#remember that evry time you copy a .rpm file in /repos/CentOS/7/Packages you must have to apply
 # the web interface is the ip address of the server 
