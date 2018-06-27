@@ -4,14 +4,19 @@ yum install -y nagios
 systemctl enable nagios
 systemctl start nagios
 setenforce 0 
+
 yum install -y httpd
 systemctl enable httpd
 systemctl start httpd
+
 yum install -y nrpe
 systemctl enable nrpe
 systemctl start nrpe
-yum install nagios-plugins-all
-yum install nagios-plugins-nrpe
+
+yum install -y nagios-plugins-all
+yum install -y nagios-plugins-nrpe
+
+#create the password using the following line
 htpasswd -c /etc/nagios/passwd nagiosadmin
 #history | cut -c 8-
 chmod 777 /etc/nagios/conf.d
